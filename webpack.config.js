@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
     entry: {
-        // blackJackJS: './src/controllers/game1.js',
+        chessJS: './src/js/controllers/game.js',
         indexJS: './src/js/index.js'
     },
     output: {
@@ -17,14 +17,13 @@ module.exports = {
             template: "./src/template/index.html",
             chunks: ['indexJS']
 
-        })
-        /*, new HtmlWebpackPlugin({
-                    filename: "blackJack.html",
-                    title: "BlackJack",
-                    template: "./src/template/blackJack.html",
-                    chunks: ['blackJackJS']
+        }), new HtmlWebpackPlugin({
+            filename: "chess.html",
+            title: "Chess",
+            template: "./src/template/chess.html",
+            chunks: ['chessJS']
 
-                })*/
+        })
     ],
     devServer: {
         contentBase: "./dist"

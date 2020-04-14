@@ -20,7 +20,7 @@ export const indexNav = `<nav class="navbar navbar-expand-lg navbar-light bg-lig
         Projects
       </a>
       <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-        <a class="dropdown-item" href="#">Project Chess</a>
+        <a class="dropdown-item" href="chess.html">Project Chess</a>
       </div>
     </li>
   </ul>
