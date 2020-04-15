@@ -24,5 +24,9 @@ export default class King extends Figure {
             srcId + 1 === destId);
     }
 
+    pathToDest(src, dest) {
+        return [];
+    }
+
 
 }

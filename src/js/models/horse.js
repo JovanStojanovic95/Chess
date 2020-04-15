@@ -4,7 +4,7 @@ export default class Horse extends Figure {
     constructor(player) {
         super(player);
         this.figure;
-        this.jump = true;
+
         if (player === 'white') {
             this.figure = "&#9816;"
         } else {
@@ -21,4 +21,8 @@ export default class Horse extends Figure {
             Math.abs(srcId - destId) === 8);
     }
 
+
+    pathToDest(src, dest) {
+        return [];
+    }
 }

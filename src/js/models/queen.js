@@ -23,4 +23,37 @@ export default class Queen extends Figure {
         }
         return false;
     }
+
+
+    pathToDest(src, dest) {
+        let path = [];
+        let startPositon;
+        let endPosition;
+        let acm;
+        if (src.id > dest.id) {
+            startPositon = dest.id;
+            endPosition = src.id;
+        } else {
+            startPositon = src.id;
+            endPosition = dest.id;
+        }
+        if (Math.abs(src.id - dest.id) % 10 === 0) {
+            acm = 10;
+            startPositon += 10;
+        } else if (Math.abs(src.id - dest.id) % 9 === 0) {
+            acm = 9;
+            startPositon += 9;
+        } else if (Math.abs(src.id - dest.id) % 11 === 0) {
+            acm = 11;
+            startPositon += 11;
+        } else {
+            acm = 1;
+            startPositon += 1;
+        }
+
+        for (let i = startPositon; i < endPosition; i += acm) {
+            path.push(i);
+        }
+        return path;
+    }
 }

@@ -1,23 +1,20 @@
 export default class Square {
-    constructor(id, colorClass, move, parent) {
-        this.move = move;
+    constructor(id, colorClass, name, parent) {
         this.id = id;
         this.color = colorClass;
         this.figureImg = "";
         this.figure = {};
         this.setSquareView(parent);
+        this.name = name;
+        this.ref;
     }
-    getSquare() {
-        return document.querySelector(`.square_${this.id}`);
-    }
+
     setSquareView(parent) {
-        let div = document.createElement('div');
-        div.className = `${this.color} square_${this.id}`;
-        div.move = this.move;
-        div.id = this.id;
-        div.ref = this;
-        div.innerHTML = this.figureImg;
-        parent.appendChild(div);
+        this.div = document.createElement('div');
+        this.div.className = this.color;
+        this.div.ref = this;
+        this.div.innerHTML = this.figureImg;
+        parent.appendChild(this.div);
     }
     changeFigure(ob) {
         if (!ob) {
@@ -27,7 +24,11 @@ export default class Square {
             this.figureImg = ob.figure;
             this.figure = ob;
         }
-        this.getSquare().innerHTML = this.figureImg;
+        this.div.innerHTML = this.figureImg;
+    }
+
+    haveFigure() {
+        return Object.keys(this.figure).length === 0;
     }
 
 

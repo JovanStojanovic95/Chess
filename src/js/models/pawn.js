@@ -23,5 +23,7 @@
          return (Math.abs(srcId - destId) === 10);
      }
 
-
+     pathToDest(src, dest) {
+         return [];
+     }
  }
