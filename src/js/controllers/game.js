@@ -3,25 +3,28 @@ import * as navsViews from '../views/base';
 import ChessBoard from './board';
 import PlayerController from './player';
 
-const player = new PlayerController('white', 'jova', 3000);
-console.log("HEYYY");
-
+let player0 = document.querySelector(".player0");
+let player1 = document.querySelector(".player1");
 
 class Game {
-    constructor(name1, name2, lap) {
-        this.newGame(name1, name2, lap);
+    constructor(name1, name2, parent) {
+        this.newGame(name1, name2, parent);
     }
 
     newGame(name1, name2, lap) {
-        this.players = [new PlayerController('white', name1, lap), new PlayerController('black', name2, lap)];
+        this.lap = lap;
+
+        let player0 = document.querySelector(".player0");
+        let player1 = document.querySelector(".player1");
+        this.players = [new PlayerController('white', name1, player0), new PlayerController('black', name2, player1)];
         this.board = new ChessBoard();
         this.activePlayer = 'white';
         this.board.init();
         this.fromMove;
         this.toMove;
         this.k = 0;
-        this.boardHandler()
-        console.log(this.players);
+        this.boardHandler();
+
     }
     restartMove() {
         this.fromMove = undefined;
@@ -30,18 +33,34 @@ class Game {
     }
 
     endPhase() {
+        let index;
+        this.activePlayer === 'white' ? index = 0 : index = 1;
+        //console.log(this.timer);
+        // this.timer.cancel();
+
+        // this.players[Number(!index)].timerOn();
         let res = this.board.moveFigure(this.fromMove, this.toMove, this.activePlayer);
         if (res.finish) {
-            this.players[this.activePlayer === 'white' ? 0 : 1].eat(res.fallFigure);
-            this.players[this.activePlayer === 'white' ? 0 : 1].nextMove(res.movement);
+            // this.players[index].timerOff();
+            // this.timer.start();
+            // console.log()
+
+            this.players[index].eat(res.fallFigure);
+            this.players[index].nextMove(res.movement);
             this.activePlayer === 'white' ? this.activePlayer = 'black' : this.activePlayer = 'white';
+            console.log(this.players[index].eatenFigure)
+
         }
-        console.log(this.players);
+        console.log(Number(!index));
+    }
+
+    testing() {
 
     }
 
     boardHandler() {
         document.querySelector(".chessboardBox").addEventListener("click", (e) => {
+
             if (this.k % 2 === 0) {
                 this.fromMove = e.target.ref;
                 if (!this.fromMove.figureImg) {
@@ -58,6 +77,9 @@ class Game {
             }
         });
     }
+
+
 }
 
-const app = new Game("jovan", "aleksa", 0);
+
+const app = new Game("Jovan", "Aleksa");

@@ -1,11 +1,10 @@
  import Figure from "./figure";
-
+ import Queen from './queen';
  export default class Pawn extends Figure {
      constructor(player, nativePosition) {
          super(player);
          this.figure;
          this.nativePosition = nativePosition;
-         // this.specPower = false;
          if (player === 'white') {
              this.figure = "&#9817;"
          } else {
@@ -14,6 +13,7 @@
      }
 
      isMovePossible(src, dest) {
+         this.specialPower(dest)
          if (this.samePlayer(dest.figure)) {
              return false;
          }
@@ -52,9 +52,15 @@
      specialPower(dest) {
          console.log(dest.id);
          if (this.player === 'white') {
-             return dest.id > 80;
+             if (dest.id > 80) {
+                 dest.figure = new Queen(this.player);
+                 dest.figure.specPower = true;
+             }
          } else {
-             return dest.id < 20;
+             if (dest.id < 20) {
+                 dest.figure = new Queen(this.player);
+                 dest.figure.specPower = true;
+             }
          }
      }
  }

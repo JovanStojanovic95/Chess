@@ -41,7 +41,6 @@ export default class King extends Figure {
                     console.log('mala rokada');
                     dest.figure.specPower = true;
                     src.figure.specPower = true;
-
                 }
             }
             if (Math.abs(src.id - dest.id) === 4) {
