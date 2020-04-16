@@ -12,14 +12,14 @@ export default class Bishop extends Figure {
     }
 
     isMovePossible(src, dest) {
-        let srcId = src.id;
-        let destId = dest.id;
+        if (this.samePlayer(dest.figure)) {
+            return false;
+        }
         if (src.color === dest.color) {
-            return (Math.abs(srcId - destId) % 9 === 0 ||
-                Math.abs(srcId - destId) % 11 === 0);
+            return (Math.abs(src.id - dest.id) % 9 === 0 ||
+                Math.abs(src.id - dest.id) % 11 === 0);
         }
         return false;
-
     }
 
     pathToDest(src, dest) {
@@ -27,13 +27,9 @@ export default class Bishop extends Figure {
         let startPositon;
         let endPosition;
         let acm;
-        if (src.id > dest.id) {
-            startPositon = dest.id;
-            endPosition = src.id;
-        } else {
-            startPositon = src.id;
-            endPosition = dest.id;
-        }
+        src.id > dest.id ? startPositon = dest.id : startPositon = src.id;
+        src.id > dest.id ? endPosition = src.id : endPosition = dest.id;
+
         if (Math.abs(src.id - dest.id) % 9 === 0) {
             acm = 9;
             startPositon += 9;

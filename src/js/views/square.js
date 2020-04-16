@@ -28,7 +28,7 @@ export default class Square {
     }
 
     haveFigure() {
-        return Object.keys(this.figure).length === 0;
+        return Object.keys(this.figure).length !== 0;
     }
 
 

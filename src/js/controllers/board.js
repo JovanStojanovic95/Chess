@@ -4,16 +4,8 @@ import * as navsViews from "./../views/base";
 export default class ChessBoard {
     constructor() {
         this.board = "";
-        this.fromMove;
-        this.toMove;
-        this.k = 0;
         this.boardMap = new Map();
         this.setNewBoard();
-    }
-    restartMove() {
-        this.fromMove = undefined;
-        this.toMove = undefined;
-        this.k = 0;
     }
 
     setNewBoard() {
@@ -22,82 +14,68 @@ export default class ChessBoard {
         for (let i = 1; i < 9; i++) {
             let plus = i * 10;
             for (let j = 1; j < 9; j++) {
-                let square = new Square(plus + j, `${(j+i) % 2 !== 0 ? "whiteBox" : "blackBox"}`,
+                let square = new Square(
+                    plus + j,
+                    `${(j + i) % 2 !== 0 ? "whiteBox" : "blackBox"}`,
                     `${ind[j]}${i}`,
-                    this.board)
+                    this.board
+                );
                 this.boardMap.set(plus + j, square);
             }
-
         }
     }
 
-    testHandler() {
-        document.querySelector(".chessboardBox").addEventListener("click", (e) => {
-            console.log(e.target.ref);
-            if (this.k % 2 === 0) {
-                this.fromMove = e.target.ref;
-                if (!this.fromMove.figureImg) {
-                    this.restartMove();
-                    return;
-                }
-            } else {
-                this.toMove = e.target.ref;
-            }
-            this.k++;
-            if (this.toMove && this.fromMove) {
-                this.moveFigure(this.fromMove, this.toMove);
-            } else {
-                console.log("not yet");
-            }
-        });
-    }
     init() {
         navsViews.renderNav(this.board, document.querySelector(".boardPlace"));
         this.setPlayersByMap();
-        this.testHandler()
     }
 
-    moveFigure(src, dest) {
-        if (
-            !src.figure.isMovePossible(src, dest) ||
-            this.testMoveSamePlayer(src, dest) ||
-            !this.testJumpMove(src, dest)
-        ) {
-            this.restartMove();
-            return false;
-        } else if (true) {
-            let fallFigure = dest.figure;
-            dest.changeFigure(src.figure);
-            src.changeFigure(undefined);
-            this.restartMove();
-            return fallFigure;
-        }
-    }
-    testMoveSamePlayer(src, dest) {
-        if (dest) {
-            return src.figure.isSamePlayer(dest.figure.player);
-        } else {
-            return false;
-        }
-    }
+    moveFigure(src, dest, player) {
+        let response = {
+            fallFigure: false,
+            movement: '',
+            finish: false
+        };
+        if (src.figure.player === player) {
 
-    test() {
-        // console.log(src.ref.isMovePossible(src.dataset.id, dest.dataset.id))
-        let mapPos;
-        /*let positions = this.boardSquares.filter((el) => {
-            if (src.figure.isMovePossible(src, el)) {
-                //&& el.figure === ""
 
-                return el;
+            if (!src.figure.isMovePossible(src, dest, this.boardMap) || !this.pathMove(src, dest)) {
+                if (dest.figure.specPower) {
+                    src.changeFigure(src.figure);
+                    dest.changeFigure(dest.figure);
+                    response.finish = true;
+                    response.movement = 'ROKADA';
+                    console.log(response)
+                    return response;
+                }
+                console.log(response)
+                return response;
+            } else {
+                src.figure.firstMove = false;
+                response.finish = true;
+                response.movement = `[${src.name}]-${src.figure.figure}->[${dest.name}]-${src.figure.figure}`;
+                if (dest.figure instanceof modeli.Figure) {
+                    response.fallFigure = dest.figure;
+                    response.movement = `[${src.name}]-${src.figure.figure}->[${dest.name}]-${dest.figure.figure}`;
+
+                }
+                dest.changeFigure(src.figure);
+                src.changeFigure(undefined);
+                console.log(response)
+                return response;
             }
-        });*/
+        }
+        return response;
     }
-    testJumpMove(src, dest) {
+
+    pathMove(src, dest) {
         let path = src.figure.pathToDest(src, dest).reverse();
         if (path.length === 0) {
             return true;
         }
-        let move = path.some(el => this.boardMap.get(el).figure instanceof modeli.Figure);
+        let move = path.some(
+            (el) => this.boardMap.get(el).figure instanceof modeli.Figure
+        );
         return !move;
     }
 
@@ -105,8 +83,8 @@ export default class ChessBoard {
         let ten = 10;
         let eighty = 80;
         for (let i = 1; i < 9; i++) {
-            this.boardMap.get(20 + i).changeFigure(new modeli.Pawn("white"));
-            this.boardMap.get(70 + i).changeFigure(new modeli.Pawn("black"));
+            this.boardMap.get(20 + i).changeFigure(new modeli.Pawn("white", 20 + i));
+            this.boardMap.get(70 + i).changeFigure(new modeli.Pawn("black", 70 + i));
             if (i === 1) {
                 this.boardMap.get(ten + i).changeFigure(new modeli.Rock("white"));
                 this.boardMap.get(eighty + i).changeFigure(new modeli.Rock("black"));
@@ -120,12 +98,11 @@ export default class ChessBoard {
                 this.boardMap.get(eighty + i).changeFigure(new modeli.Bishop("black"));
             }
             if (i === 4) {
-                this.boardMap.get(ten + i).changeFigure(new modeli.King("white"));
+                this.boardMap.get(ten + i).changeFigure(new modeli.Queen("white"));
                 this.boardMap.get(eighty + i).changeFigure(new modeli.Queen("black"));
             }
             if (i === 5) {
-
-                this.boardMap.get(ten + i).changeFigure(new modeli.Queen("white"));
+                this.boardMap.get(ten + i).changeFigure(new modeli.King("white"));
                 this.boardMap.get(eighty + i).changeFigure(new modeli.King("black"));
             }
             if (i === 6) {
@@ -140,8 +117,6 @@ export default class ChessBoard {
                 this.boardMap.get(ten + i).changeFigure(new modeli.Rock("white"));
                 this.boardMap.get(eighty + i).changeFigure(new modeli.Rock("black"));
             }
-
         }
-
     }
 }

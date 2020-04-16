@@ -4,7 +4,6 @@ export default class Horse extends Figure {
     constructor(player) {
         super(player);
         this.figure;
-
         if (player === 'white') {
             this.figure = "&#9816;"
         } else {
@@ -13,14 +12,14 @@ export default class Horse extends Figure {
     }
 
     isMovePossible(src, dest) {
-        let srcId = src.id;
-        let destId = dest.id;
-        return (Math.abs(srcId - destId) === 19 ||
-            Math.abs(srcId - destId) === 21 ||
-            Math.abs(srcId - destId) === 12 ||
-            Math.abs(srcId - destId) === 8);
+        if (this.samePlayer(dest.figure)) {
+            return false;
+        }
+        return (Math.abs(src.id - dest.id) === 19 ||
+            Math.abs(src.id - dest.id) === 21 ||
+            Math.abs(src.id - dest.id) === 12 ||
+            Math.abs(src.id - dest.id) === 8);
     }
-
 
     pathToDest(src, dest) {
         return [];

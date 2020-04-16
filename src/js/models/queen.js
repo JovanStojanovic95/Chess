@@ -12,14 +12,15 @@ export default class Queen extends Figure {
     }
 
     isMovePossible(src, dest) {
-        let srcId = src.id;
-        let destId = dest.id;
-        if (Math.floor(srcId / 10) === Math.floor(destId / 10) ||
-            srcId % 10 === destId % 10)
+        if (this.samePlayer(dest.figure)) {
+            return false;
+        }
+        if (Math.floor(src.id / 10) === Math.floor(dest.id / 10) ||
+            src.id % 10 === dest.id % 10)
             return true;
         if (src.color === dest.color) {
-            return (Math.abs(srcId - destId) % 9 === 0 ||
-                Math.abs(srcId - destId) % 11 === 0);
+            return (Math.abs(src.id - dest.id) % 9 === 0 ||
+                Math.abs(src.id - dest.id) % 11 === 0);
         }
         return false;
     }
@@ -30,13 +31,8 @@ export default class Queen extends Figure {
         let startPositon;
         let endPosition;
         let acm;
-        if (src.id > dest.id) {
-            startPositon = dest.id;
-            endPosition = src.id;
-        } else {
-            startPositon = src.id;
-            endPosition = dest.id;
-        }
+        src.id > dest.id ? startPositon = dest.id : startPositon = src.id;
+        src.id > dest.id ? endPosition = src.id : endPosition = dest.id;
         if (Math.abs(src.id - dest.id) % 10 === 0) {
             acm = 10;
             startPositon += 10;

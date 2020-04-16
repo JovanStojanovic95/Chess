@@ -1,10 +1,11 @@
  import Figure from "./figure";
 
  export default class Pawn extends Figure {
-     constructor(player) {
+     constructor(player, nativePosition) {
          super(player);
          this.figure;
-         this.firstMove = true;
+         this.nativePosition = nativePosition;
+         // this.specPower = false;
          if (player === 'white') {
              this.figure = "&#9817;"
          } else {
@@ -13,17 +14,47 @@
      }
 
      isMovePossible(src, dest) {
-         // ne radi ako rucka!!!
-         let srcId = src.id;
-         let destId = dest.id;
-         if (this.firstMove) {
-             this.firstMove = false;
-             return (Math.abs(srcId - destId) === 10 || Math.abs(srcId - destId) === 20);
+         if (this.samePlayer(dest.figure)) {
+             return false;
          }
-         return (Math.abs(srcId - destId) === 10);
+         if (dest.figure instanceof Figure) {
+             if (!this.samePlayer(dest.figure)) {
+                 if (this.player === 'white') {
+                     return src.id + 11 === dest.id || src.id + 9 === dest.id
+                 } else {
+                     return src.id - 11 === dest.id || src.id - 9 === dest.id
+                 }
+             }
+         }
+         if (this.player === 'white') {
+             if (this.firstMove) {
+                 return src.id + 10 === dest.id || src.id + 20 === dest.id;
+             }
+             return src.id + 10 === dest.id;
+         } else {
+             if (this.firstMove) {
+                 return src.id - 10 === dest.id || src.id - 20 === dest.id;
+             }
+             return src.id - 10 === dest.id;
+         }
      }
+
+
+     isEnemy(dest) {
+         return this.player !== dest.figure.player;
+     }
+
 
      pathToDest(src, dest) {
          return [];
+     }
+
+     specialPower(dest) {
+         console.log(dest.id);
+         if (this.player === 'white') {
+             return dest.id > 80;
+         } else {
+             return dest.id < 20;
+         }
      }
  }
