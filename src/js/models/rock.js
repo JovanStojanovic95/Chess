@@ -13,7 +13,7 @@ export default class Rock extends Figure {
     }
 
     isMovePossible(src, dest, map) {
-        this.specialPower(dest, src, map);
+        //  this.specialPower(dest, src, map);
         if (this.samePlayer(dest.figure)) {
             return false;
         }
@@ -52,7 +52,10 @@ export default class Rock extends Figure {
                     src.figure = new King(this.player);
                     dest.figure.specPower = true;
                     src.figure.specPower = true;
-                    console.log('mala rokada')
+                    dest.square = src.id;
+                    src.square =
+                        console.log('mala rokada')
+                    console.log(src, dest);
                 }
             }
             if (Math.abs(src.id - dest.id) === 4) {
@@ -61,6 +64,7 @@ export default class Rock extends Figure {
                     src.figure = new King(this.player);
                     dest.figure.specPower = true;
                     src.figure.specPower = true;
+                    src.square = dest.id;
                     console.log('velika rokada')
                 }
             }

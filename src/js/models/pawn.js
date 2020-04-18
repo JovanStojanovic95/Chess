@@ -13,7 +13,7 @@
      }
 
      isMovePossible(src, dest) {
-         this.specialPower(dest)
+         //this.specialPower(dest)
          if (this.samePlayer(dest.figure)) {
              return false;
          }
@@ -50,7 +50,6 @@
      }
 
      specialPower(dest) {
-         console.log(dest.id);
          if (this.player === 'white') {
              if (dest.id > 80) {
                  dest.figure = new Queen(this.player);

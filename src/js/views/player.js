@@ -20,8 +20,6 @@ export default class PlayerView {
         parent.appendChild(this.div);
     }
     changeFigure(figures) {
-        console.log("nesto")
-        console.log(figures.figure);
         this.figures.innerHTML = this.figures.innerHTML + " " + figures.figure;
     }
 

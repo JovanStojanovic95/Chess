@@ -35,28 +35,14 @@ class Game {
     endPhase() {
         let index;
         this.activePlayer === 'white' ? index = 0 : index = 1;
-        //console.log(this.timer);
-        // this.timer.cancel();
-
-        // this.players[Number(!index)].timerOn();
         let res = this.board.moveFigure(this.fromMove, this.toMove, this.activePlayer);
         if (res.finish) {
-            // this.players[index].timerOff();
-            // this.timer.start();
-            // console.log()
-
             this.players[index].eat(res.fallFigure);
             this.players[index].nextMove(res.movement);
             this.activePlayer === 'white' ? this.activePlayer = 'black' : this.activePlayer = 'white';
-            console.log(this.players[index].eatenFigure)
-
         }
-        console.log(Number(!index));
     }
 
-    testing() {
-
-    }
 
     boardHandler() {
         document.querySelector(".chessboardBox").addEventListener("click", (e) => {

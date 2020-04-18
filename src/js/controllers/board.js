@@ -33,22 +33,25 @@ export default class ChessBoard {
     moveFigure(src, dest, player) {
         let response = {
             fallFigure: false,
-            movement: '',
-            finish: false
+            movement: "",
+            finish: false,
         };
         if (src.figure.player === player) {
 
-
-            if (!src.figure.isMovePossible(src, dest, this.boardMap) || !this.pathMove(src, dest)) {
+            if (this.testingChess(src.figure.player) && this.testingChess(src.figure.player)) {
+                console.log('end game')
+            }
+            if (
+                !src.figure.isMovePossible(src, dest, this.boardMap) ||
+                !this.pathMove(src, dest)
+            ) {
                 if (dest.figure.specPower) {
                     src.changeFigure(src.figure);
                     dest.changeFigure(dest.figure);
                     response.finish = true;
-                    response.movement = 'ROKADA';
-                    console.log(response)
+                    response.movement = "ROKADA";
                     return response;
                 }
-                console.log(response)
                 return response;
             } else {
                 src.figure.firstMove = false;
@@ -57,11 +60,13 @@ export default class ChessBoard {
                 if (dest.figure instanceof modeli.Figure) {
                     response.fallFigure = dest.figure;
                     response.movement = `[${src.name}]-${src.figure.figure}->[${dest.name}]-${dest.figure.figure}`;
-
                 }
+                if (src.figure instanceof modeli.King && src.figure.player === player) {
+                    src.figure.square = dest.id;
+                }
+
                 dest.changeFigure(src.figure);
                 src.changeFigure(undefined);
-                console.log(response)
                 return response;
             }
         }
@@ -78,6 +83,87 @@ export default class ChessBoard {
         );
         return !move;
     }
+
+    testingChess(player) {
+        let king;
+        player === 'white' ? king = this.whiteKing : king = this.blackKing;
+        let muKing = king; //board.get(this.square);
+        let kingSquere = this.boardMap.get(muKing.square);
+        this.boardMap.forEach(el => {
+            if (el.figure instanceof modeli.Figure) {
+                if (el.figure.player !== player) {
+                    if (!el.figure.isMovePossible(el, kingSquere, this.boardMap) ||
+                        !this.pathMove(el, kingSquere)) {
+
+                    } else {
+                        console.log("Sah");
+                        console.log(el);
+                        this.testing(player);
+                    }
+                }
+            }
+            return false;
+        })
+
+    }
+    haveFigure(square) {
+        if (this.boardMap.get(square)) {
+            if (this.boardMap.get(square).figure instanceof modeli.Figure) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    testing(player) {
+        console.log("TESTING")
+        let king;
+        player === 'white' ? king = this.whiteKing : king = this.blackKing;
+        let muKing = this.whiteKing; //board.get(this.square);
+        let kingSquere = this.boardMap.get(muKing.square);
+        let positions = this.whiteKing.isCheckmate();
+        let ocupate = [];
+        let br = 0;
+        let nzm = 0;
+        positions.forEach(pos => {
+            if (this.boardMap.has(pos)) {
+                let dangerSquare = this.boardMap.get(pos);
+                if (!(dangerSquare.figure instanceof modeli.Figure)) {
+
+                    this.boardMap.forEach(el => {
+                        if (el.figure instanceof modeli.Figure) {
+
+                            if (el.figure.player !== player) {
+
+                                if (!el.figure.isMovePossible(el, dangerSquare, this.boardMap) ||
+                                    !this.pathMove(el, dangerSquare)) {} else {
+
+                                    ocupate.push(el);
+
+                                }
+                            }
+                        }
+                    })
+                    br--;
+
+                }
+                br++;
+
+                nzm++;
+            }
+        })
+        console.log(br, nzm);
+        console.log(`${br} + ${ocupate.length} = ${nzm}`)
+        if (ocupate.length !== 0) {
+            if (ocupate.length + br >= nzm) {
+                console.log("SahMat")
+                return true;
+            }
+        }
+
+    }
+
+
 
     setPlayersByMap() {
         let ten = 10;
@@ -102,8 +188,10 @@ export default class ChessBoard {
                 this.boardMap.get(eighty + i).changeFigure(new modeli.Queen("black"));
             }
             if (i === 5) {
-                this.boardMap.get(ten + i).changeFigure(new modeli.King("white"));
-                this.boardMap.get(eighty + i).changeFigure(new modeli.King("black"));
+                this.whiteKing = new modeli.King("white", ten + i);
+                this.blackKing = new modeli.King("black", eighty + i);
+                this.boardMap.get(ten + i).changeFigure(this.whiteKing);
+                this.boardMap.get(eighty + i).changeFigure(this.blackKing);
             }
             if (i === 6) {
                 this.boardMap.get(ten + i).changeFigure(new modeli.Bishop("white"));
