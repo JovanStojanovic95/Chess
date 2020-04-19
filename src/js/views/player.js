@@ -3,6 +3,7 @@ export default class PlayerView {
         this.color = color;
         this.figureImg = "";
         this.name = name;
+        this.parent = parent;
         this.setPlayerView(parent);
         this.setPlayer1View(parent);
 
@@ -22,5 +23,6 @@ export default class PlayerView {
     changeFigure(figures) {
         this.figures.innerHTML = this.figures.innerHTML + " " + figures.figure;
     }
+
 
 }

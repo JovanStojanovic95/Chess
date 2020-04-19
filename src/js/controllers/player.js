@@ -8,7 +8,8 @@ export default class PlayerController {
         this.moves = [];
         this.eatenFigure = [];
         this.lose = false;
-        this.view = new PlayerView(this.color, this.name, parent)
+        this.view = new PlayerView(this.color, this.name, parent);
+
     }
     eat(figure) {
         if (figure instanceof modeli.Figure) {
@@ -25,6 +26,11 @@ export default class PlayerController {
         alert(`Player ${this.name} Lose`);
 
     }
+    clearAll() {
+        this.view.parent.innerHTML = "";
+    }
+
+
 
 
 }

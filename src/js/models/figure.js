@@ -2,7 +2,7 @@ export default class Figure {
     constructor(player) {
         this.player = player;
         this.firstMove = true;
-        this.specPower = false;
+        this.specPower = true;
     }
     haveFigure(figure) {
         if (figure instanceof Figure)

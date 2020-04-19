@@ -13,10 +13,11 @@
      }
 
      isMovePossible(src, dest) {
-         //this.specialPower(dest)
-         if (this.samePlayer(dest.figure)) {
-             return false;
-         }
+         //  this.specialPower(src)
+         //console.log(src, dest);
+         // if (this.samePlayer(dest.figure)) {
+         //  return false;
+         //  }
          if (dest.figure instanceof Figure) {
              if (!this.samePlayer(dest.figure)) {
                  if (this.player === 'white') {
@@ -50,16 +51,25 @@
      }
 
      specialPower(dest) {
+         //  console.log(dest)
          if (this.player === 'white') {
              if (dest.id > 80) {
+                 console.log("Power ON")
                  dest.figure = new Queen(this.player);
                  dest.figure.specPower = true;
+                 console.log(this.getElement(dest.figure.player));
              }
          } else {
              if (dest.id < 20) {
+                 console.log("Power ON")
                  dest.figure = new Queen(this.player);
                  dest.figure.specPower = true;
+                 console.log(this.getElement(dest.figure.player));
              }
          }
+     }
+
+     getElement(player) {
+         return document.querySelector(`.figures_${player}`)
      }
  }

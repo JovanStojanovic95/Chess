@@ -37,7 +37,9 @@ export default class ChessBoard {
             finish: false,
         };
         if (src.figure.player === player) {
-
+            if (src.id === dest.id) {
+                return response;
+            }
             if (this.testingChess(src.figure.player) && this.testingChess(src.figure.player)) {
                 console.log('end game')
             }
@@ -87,8 +89,7 @@ export default class ChessBoard {
     testingChess(player) {
         let king;
         player === 'white' ? king = this.whiteKing : king = this.blackKing;
-        let muKing = king; //board.get(this.square);
-        let kingSquere = this.boardMap.get(muKing.square);
+        let kingSquere = this.boardMap.get(king.square);
         this.boardMap.forEach(el => {
             if (el.figure instanceof modeli.Figure) {
                 if (el.figure.player !== player) {
@@ -96,9 +97,8 @@ export default class ChessBoard {
                         !this.pathMove(el, kingSquere)) {
 
                     } else {
-                        console.log("Sah");
-                        console.log(el);
-                        this.testing(player);
+                        alert("Sah");
+                        let sahMat = this.testing(player);
                     }
                 }
             }
@@ -119,15 +119,20 @@ export default class ChessBoard {
         console.log("TESTING")
         let king;
         player === 'white' ? king = this.whiteKing : king = this.blackKing;
-        let muKing = this.whiteKing; //board.get(this.square);
-        let kingSquere = this.boardMap.get(muKing.square);
-        let positions = this.whiteKing.isCheckmate();
+        let positions;
         let ocupate = [];
         let br = 0;
-        let nzm = 0;
+        let max = [];
+
+        function removeDuplicates(data) {
+            return [...new Set(data)]
+        }
+        positions = removeDuplicates(king.isCheckmate());
+
         positions.forEach(pos => {
             if (this.boardMap.has(pos)) {
                 let dangerSquare = this.boardMap.get(pos);
+                console.log(dangerSquare);
                 if (!(dangerSquare.figure instanceof modeli.Figure)) {
 
                     this.boardMap.forEach(el => {
@@ -136,9 +141,18 @@ export default class ChessBoard {
                             if (el.figure.player !== player) {
 
                                 if (!el.figure.isMovePossible(el, dangerSquare, this.boardMap) ||
-                                    !this.pathMove(el, dangerSquare)) {} else {
+                                    !this.pathMove(el, dangerSquare)) {
 
-                                    ocupate.push(el);
+                                } else {
+                                    // console.log(el.figure, dangerSquare)
+                                    if (ocupate.length === 0) {
+                                        ocupate.push(dangerSquare.id);
+                                    }
+                                    ocupate.forEach(e => {
+                                        if (dangerSquare.id !== e) {
+                                            ocupate.push(dangerSquare.id);
+                                        }
+                                    })
 
                                 }
                             }
@@ -148,20 +162,24 @@ export default class ChessBoard {
 
                 }
                 br++;
-
-                nzm++;
+                console.log(pos)
+                max++;
             }
         })
-        console.log(br, nzm);
-        console.log(`${br} + ${ocupate.length} = ${nzm}`)
+        console.log(ocupate);
+        console.log(`${br} + ${ocupate.length} = ${max}`)
         if (ocupate.length !== 0) {
-            if (ocupate.length + br >= nzm) {
+            if (ocupate.length + br >= max) {
                 console.log("SahMat")
                 return true;
+            } else {
+                return false;
             }
         }
 
     }
+
+
 
 
 

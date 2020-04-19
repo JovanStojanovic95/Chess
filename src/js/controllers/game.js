@@ -36,7 +36,15 @@ class Game {
         let index;
         this.activePlayer === 'white' ? index = 0 : index = 1;
         let res = this.board.moveFigure(this.fromMove, this.toMove, this.activePlayer);
+        // console.log(res);
         if (res.finish) {
+            if (res.endGame) {
+                //this.newGame("Jovan", "Aleksa");
+                alert("Game end!")
+                // this.board.clearAll();
+
+                return;
+            }
             this.players[index].eat(res.fallFigure);
             this.players[index].nextMove(res.movement);
             this.activePlayer === 'white' ? this.activePlayer = 'black' : this.activePlayer = 'white';
