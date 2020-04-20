@@ -21,6 +21,7 @@ export default class PlayerView {
         parent.appendChild(this.div);
     }
     changeFigure(figures) {
+
         this.figures.innerHTML = this.figures.innerHTML + " " + figures.figure;
     }
 

@@ -14,7 +14,7 @@ export default class Rock extends Figure {
 
     isMovePossible(src, dest, map) {
         if (this.firstMove) {
-            this.firstMove = false;
+
             //  this.specialPower(dest, src, map)
         }
         if (this.samePlayer(dest.figure)) {
@@ -23,6 +23,7 @@ export default class Rock extends Figure {
         if (Math.floor(src.id / 10) === Math.floor(dest.id / 10) ||
             src.id % 10 === dest.id % 10
         ) {
+
             this.firstMove = false;
             return true;
         }

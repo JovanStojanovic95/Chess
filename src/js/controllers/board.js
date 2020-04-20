@@ -6,6 +6,8 @@ export default class ChessBoard {
         this.board = "";
         this.boardMap = new Map();
         this.setNewBoard();
+        this.whiteKing;
+        this.blackKing;
     }
 
     setNewBoard() {
@@ -40,20 +42,23 @@ export default class ChessBoard {
             if (src.id === dest.id) {
                 return response;
             }
-            if (this.testingChess(src.figure.player) && this.testingChess(src.figure.player)) {
-                console.log('end game')
-            }
+
             if (
                 !src.figure.isMovePossible(src, dest, this.boardMap) ||
                 !this.pathMove(src, dest)
             ) {
+
                 if (dest.figure.specPower) {
+                    let king;
+                    player === 'white' ? king = this.whiteKing : king = this.blackKing;
                     src.changeFigure(src.figure);
                     dest.changeFigure(dest.figure);
+                    king.square = dest.id;
                     response.finish = true;
                     response.movement = "ROKADA";
                     return response;
                 }
+
                 return response;
             } else {
                 src.figure.firstMove = false;
@@ -63,12 +68,36 @@ export default class ChessBoard {
                     response.fallFigure = dest.figure;
                     response.movement = `[${src.name}]-${src.figure.figure}->[${dest.name}]-${dest.figure.figure}`;
                 }
+                console.log(src.figure);
                 if (src.figure instanceof modeli.King && src.figure.player === player) {
-                    src.figure.square = dest.id;
+                    let king;
+                    player === 'white' ? king = this.whiteKing : king = this.blackKing;
+                    king.square = dest.id;
                 }
-
+                let realSrc = src.figure;
                 dest.changeFigure(src.figure);
                 src.changeFigure(undefined);
+
+                let test = this.testingChess(player)
+
+                if (test.sah) {
+                    alert("Sah");
+                    dest.changeFigure(undefined);
+                    src.changeFigure(realSrc);
+
+                    if (this.testingChess(player).mat) {
+
+                        console.log('end game')
+                    }
+                    dest.changeFigure(undefined);
+                    src.changeFigure(realSrc);
+                    response.fallFigure = false;
+                    response.movement = "";
+                    response.finish = false;
+                    return response;
+                }
+
+
                 return response;
             }
         }
@@ -88,8 +117,13 @@ export default class ChessBoard {
 
     testingChess(player) {
         let king;
+        let chessOrMat = {
+            sah: false,
+            mat: false
+        };
         player === 'white' ? king = this.whiteKing : king = this.blackKing;
         let kingSquere = this.boardMap.get(king.square);
+        let sahMat = false;
         this.boardMap.forEach(el => {
             if (el.figure instanceof modeli.Figure) {
                 if (el.figure.player !== player) {
@@ -97,14 +131,16 @@ export default class ChessBoard {
                         !this.pathMove(el, kingSquere)) {
 
                     } else {
-                        alert("Sah");
-                        let sahMat = this.testing(player);
+
+                        chessOrMat.sah = true;
+                        chessOrMat.mat = this.testing(player);
+
                     }
                 }
             }
-            return false;
+            return chessOrMat;
         })
-
+        return chessOrMat;
     }
     haveFigure(square) {
         if (this.boardMap.get(square)) {
@@ -116,23 +152,21 @@ export default class ChessBoard {
     }
 
     testing(player) {
-        console.log("TESTING")
         let king;
         player === 'white' ? king = this.whiteKing : king = this.blackKing;
         let positions;
-        let ocupate = [];
+        let occupate = [];
         let br = 0;
         let max = [];
 
         function removeDuplicates(data) {
-            return [...new Set(data)]
+            return [...new Set(data)];
         }
-        positions = removeDuplicates(king.isCheckmate());
-
+        positions = removeDuplicates(king.getPositons());
         positions.forEach(pos => {
             if (this.boardMap.has(pos)) {
                 let dangerSquare = this.boardMap.get(pos);
-                console.log(dangerSquare);
+
                 if (!(dangerSquare.figure instanceof modeli.Figure)) {
 
                     this.boardMap.forEach(el => {
@@ -144,13 +178,13 @@ export default class ChessBoard {
                                     !this.pathMove(el, dangerSquare)) {
 
                                 } else {
-                                    // console.log(el.figure, dangerSquare)
-                                    if (ocupate.length === 0) {
-                                        ocupate.push(dangerSquare.id);
+
+                                    if (occupate.length === 0) {
+                                        occupate.push(dangerSquare.id);
                                     }
-                                    ocupate.forEach(e => {
+                                    occupate.forEach(e => {
                                         if (dangerSquare.id !== e) {
-                                            ocupate.push(dangerSquare.id);
+                                            occupate.push(dangerSquare.id);
                                         }
                                     })
 
@@ -162,15 +196,13 @@ export default class ChessBoard {
 
                 }
                 br++;
-                console.log(pos)
+
                 max++;
             }
         })
-        console.log(ocupate);
-        console.log(`${br} + ${ocupate.length} = ${max}`)
-        if (ocupate.length !== 0) {
-            if (ocupate.length + br >= max) {
-                console.log("SahMat")
+        console.log(`${br} + ${removeDuplicates(occupate).length} = ${max}`)
+        if (occupate.length !== 0) {
+            if (removeDuplicates(occupate).length + br >= max) {
                 return true;
             } else {
                 return false;
@@ -178,10 +210,6 @@ export default class ChessBoard {
         }
 
     }
-
-
-
-
 
     setPlayersByMap() {
         let ten = 10;

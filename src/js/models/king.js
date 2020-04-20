@@ -16,8 +16,6 @@ export default class King extends Figure {
     isMovePossible(src, dest, map) {
 
         if (this.firstMove) {
-
-
             this.specialPower(dest, src, map)
         }
 
@@ -44,16 +42,20 @@ export default class King extends Figure {
     specialPower(dest, src, map) {
 
         if (dest.figure.firstMove !== false && src.figure.firstMove !== false && dest.figure instanceof Rock) {
-
+            console.log(src, dest, 'dubelje');
             if (Math.abs(src.id - dest.id) === 3) {
-                console.log(src.id)
+
                 if (!(map.get(src.id + 1).figure instanceof Figure) && !(map.get(src.id + 2).figure instanceof Figure)) {
+                    console.log(src, dest)
                     src.figure = new Rock(this.player);
                     dest.figure = new King(this.player);
                     console.log('mala rokada');
                     dest.figure.firstMove = false;
-                    src.square = dest.id;
-                    dest.square = null;
+                    dest.figure.square = null;
+                    dest.figure.square = dest.id;
+                    dest.figure.specPower = true;
+
+
                 }
             }
             if (Math.abs(src.id - dest.id) === 4) {
@@ -61,8 +63,9 @@ export default class King extends Figure {
                     src.figure = new Rock(this.player);
                     dest.figure = new King(this.player);
                     dest.figure.firstMove = false;
-                    src.square = dest.id;
-                    dest.square = null;
+                    dest.figure.square = null;
+                    dest.figure.square = dest.id;
+                    dest.figure.specPower = true;
                     console.log('velik rokada');
                 }
             }
@@ -74,11 +77,9 @@ export default class King extends Figure {
     specPath(src, dest) {
 
     }
-    isCheckmate() {
+    getPositons() {
         return [this.square + 1, this.square - 1, this.square + 9, this.square - 9,
             this.square - 9, this.square + 10, this.square - 10, this.square + 11, this.square - 11
         ];
-
-
     }
 }

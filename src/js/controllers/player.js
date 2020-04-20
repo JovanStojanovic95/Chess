@@ -12,6 +12,7 @@ export default class PlayerController {
 
     }
     eat(figure) {
+
         if (figure instanceof modeli.Figure) {
             this.view.changeFigure(figure);
             this.eatenFigure.push(figure);

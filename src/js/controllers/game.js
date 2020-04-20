@@ -42,7 +42,7 @@ class Game {
                 //this.newGame("Jovan", "Aleksa");
                 alert("Game end!")
                 // this.board.clearAll();
-
+                // podesavanja 3.
                 return;
             }
             this.players[index].eat(res.fallFigure);

@@ -13,7 +13,7 @@
      }
 
      isMovePossible(src, dest) {
-         //  this.specialPower(src)
+         this.specialPower(src)
          //console.log(src, dest);
          // if (this.samePlayer(dest.figure)) {
          //  return false;
@@ -56,17 +56,16 @@
              if (dest.id > 80) {
                  console.log("Power ON")
                  dest.figure = new Queen(this.player);
-                 dest.figure.specPower = true;
-                 console.log(this.getElement(dest.figure.player));
+                 dest.changeFigure(dest.figure);
              }
          } else {
              if (dest.id < 20) {
                  console.log("Power ON")
                  dest.figure = new Queen(this.player);
-                 dest.figure.specPower = true;
-                 console.log(this.getElement(dest.figure.player));
+                 dest.changeFigure(dest.figure);
              }
          }
+         return false;
      }
 
      getElement(player) {
