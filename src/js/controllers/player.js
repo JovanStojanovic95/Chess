@@ -8,6 +8,7 @@ export default class PlayerController {
         this.moves = [];
         this.eatenFigure = [];
         this.lose = false;
+        this.parent = parent;
         this.view = new PlayerView(this.color, this.name, parent);
 
     }
@@ -28,7 +29,7 @@ export default class PlayerController {
 
     }
     clearAll() {
-        this.view.parent.innerHTML = "";
+        this.parent.innerHTML = "";
     }
 
 

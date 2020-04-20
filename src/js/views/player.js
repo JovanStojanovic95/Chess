@@ -15,7 +15,7 @@ export default class PlayerView {
         parent.appendChild(this.figures);
     }
     setPlayer1View(parent) {
-        this.div = document.createElement('h2');
+        this.div = document.createElement('h1');
         this.div.className = `colWhite _${this.color}`;
         this.div.innerHTML = this.name;
         parent.appendChild(this.div);

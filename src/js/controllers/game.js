@@ -5,7 +5,7 @@ import PlayerController from './player';
 
 let player0 = document.querySelector(".player0");
 let player1 = document.querySelector(".player1");
-
+let boardHtml = document.querySelector('.chessboardBox');
 class Game {
     constructor(name1, name2, parent) {
         this.newGame(name1, name2, parent);
@@ -39,10 +39,13 @@ class Game {
         // console.log(res);
         if (res.finish) {
             if (res.endGame) {
-                //this.newGame("Jovan", "Aleksa");
                 alert("Game end!")
-                // this.board.clearAll();
-                // podesavanja 3.
+                this.players[index].playerlose();
+                boardHtml.innerHTML = "";
+                this.players.forEach(el => {
+                    el.clearAll();
+                })
+                this.newGame('Player 1', "Player 2");
                 return;
             }
             this.players[index].eat(res.fallFigure);
@@ -76,4 +79,4 @@ class Game {
 }
 
 
-const app = new Game("Jovan", "Aleksa");
+const app = new Game("Player 1", "Player 2");

@@ -87,7 +87,11 @@ export default class ChessBoard {
 
                     if (this.testingChess(player).mat) {
 
-                        console.log('end game')
+                        console.log('end game');
+                        response.fallFigure = false;
+                        response.endGame = true;
+                        response.finish = true;
+                        return response;
                     }
                     dest.changeFigure(undefined);
                     src.changeFigure(realSrc);
