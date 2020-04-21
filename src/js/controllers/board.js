@@ -1,6 +1,6 @@
 import Square from "./../views/square";
 import * as modeli from "./../models";
-import * as navsViews from "./../views/base";
+
 export default class ChessBoard {
     constructor() {
         this.board = "";
@@ -8,6 +8,7 @@ export default class ChessBoard {
         this.setNewBoard();
         this.whiteKing;
         this.blackKing;
+        this.setPlayersByMap();
     }
 
     setNewBoard() {
@@ -27,11 +28,6 @@ export default class ChessBoard {
         }
     }
 
-    init() {
-        navsViews.renderNav(this.board, document.querySelector(".boardPlace"));
-        this.setPlayersByMap();
-    }
-
     moveFigure(src, dest, player) {
         let response = {
             fallFigure: false,
@@ -42,11 +38,7 @@ export default class ChessBoard {
             if (src.id === dest.id) {
                 return response;
             }
-
-            if (
-                !src.figure.isMovePossible(src, dest, this.boardMap) ||
-                !this.pathMove(src, dest)
-            ) {
+            if (!src.figure.isMovePossible(src, dest, this.boardMap) || !this.pathMove(src, dest)) {
 
                 if (dest.figure.specPower) {
                     let king;
@@ -64,11 +56,12 @@ export default class ChessBoard {
                 src.figure.firstMove = false;
                 response.finish = true;
                 response.movement = `[${src.name}]-${src.figure.figure}->[${dest.name}]-${src.figure.figure}`;
+
                 if (dest.figure instanceof modeli.Figure) {
                     response.fallFigure = dest.figure;
                     response.movement = `[${src.name}]-${src.figure.figure}->[${dest.name}]-${dest.figure.figure}`;
                 }
-                console.log(src.figure);
+
                 if (src.figure instanceof modeli.King && src.figure.player === player) {
                     let king;
                     player === 'white' ? king = this.whiteKing : king = this.blackKing;
@@ -79,20 +72,19 @@ export default class ChessBoard {
                 src.changeFigure(undefined);
 
                 let test = this.testingChess(player)
-
                 if (test.sah) {
                     alert("Sah");
                     dest.changeFigure(undefined);
                     src.changeFigure(realSrc);
 
                     if (this.testingChess(player).mat) {
-
                         console.log('end game');
                         response.fallFigure = false;
                         response.endGame = true;
                         response.finish = true;
                         return response;
                     }
+
                     dest.changeFigure(undefined);
                     src.changeFigure(realSrc);
                     response.fallFigure = false;
@@ -100,8 +92,6 @@ export default class ChessBoard {
                     response.finish = false;
                     return response;
                 }
-
-
                 return response;
             }
         }
@@ -133,12 +123,10 @@ export default class ChessBoard {
                 if (el.figure.player !== player) {
                     if (!el.figure.isMovePossible(el, kingSquere, this.boardMap) ||
                         !this.pathMove(el, kingSquere)) {
-
+                        console.log(el, kingSquere);
                     } else {
-
                         chessOrMat.sah = true;
                         chessOrMat.mat = this.testing(player);
-
                     }
                 }
             }
@@ -146,6 +134,7 @@ export default class ChessBoard {
         })
         return chessOrMat;
     }
+
     haveFigure(square) {
         if (this.boardMap.get(square)) {
             if (this.boardMap.get(square).figure instanceof modeli.Figure) {
@@ -180,9 +169,8 @@ export default class ChessBoard {
 
                                 if (!el.figure.isMovePossible(el, dangerSquare, this.boardMap) ||
                                     !this.pathMove(el, dangerSquare)) {
-
+                                    console.log(el)
                                 } else {
-
                                     if (occupate.length === 0) {
                                         occupate.push(dangerSquare.id);
                                     }
@@ -191,7 +179,6 @@ export default class ChessBoard {
                                             occupate.push(dangerSquare.id);
                                         }
                                     })
-
                                 }
                             }
                         }
@@ -200,7 +187,6 @@ export default class ChessBoard {
 
                 }
                 br++;
-
                 max++;
             }
         })
@@ -212,7 +198,6 @@ export default class ChessBoard {
                 return false;
             }
         }
-
     }
 
     setPlayersByMap() {

@@ -1,32 +1,31 @@
-import * as navsViews from '../views/base';
+import ChessBoard from "./board";
+import PlayerController from "./player";
 
-import ChessBoard from './board';
-import PlayerController from './player';
-
-let player0 = document.querySelector(".player0");
-let player1 = document.querySelector(".player1");
-let boardHtml = document.querySelector('.chessboardBox');
 class Game {
     constructor(name1, name2, parent) {
         this.newGame(name1, name2, parent);
     }
 
     newGame(name1, name2, lap) {
-        alert("New Game Start!")
-        this.lap = lap || 0;
+        alert("New Game Start!");
+        this.lap = lap;
         this.time = this.lap;
         let player0 = document.querySelector(".player0");
         let player1 = document.querySelector(".player1");
-        this.players = [new PlayerController('white', name1, player0), new PlayerController('black', name2, player1)];
+        this.players = [
+            new PlayerController("white", name1, player0),
+            new PlayerController("black", name2, player1),
+        ];
         this.board = new ChessBoard();
-        this.activePlayer = 'white';
-        this.board.init();
+        this.activePlayer = "white";
         this.fromMove;
         this.toMove;
         this.k = 0;
         this.boardHandler();
         this.timer = this.timerOn();
+        this.activePlayerView(this.activePlayer);
     }
+
     restartMove() {
         this.fromMove = undefined;
         this.toMove = undefined;
@@ -35,35 +34,34 @@ class Game {
 
     endPhase() {
         let index;
-        this.activePlayer === 'white' ? index = 0 : index = 1;
-        let res = this.board.moveFigure(this.fromMove, this.toMove, this.activePlayer);
+        this.activePlayer === "white" ? (index = 0) : (index = 1);
+        let res = this.board.moveFigure(
+            this.fromMove,
+            this.toMove,
+            this.activePlayer
+        );
         if (res.finish) {
             this.timerOff();
             this.lap = this.time;
             this.timer = this.timerOn();
             if (res.endGame) {
-                alert("Game end!")
+                alert("Game end!");
                 this.players[index].playerlose();
-                boardHtml.innerHTML = "";
-                this.players.forEach(el => {
-                    el.clearAll();
-                })
-                this.timerOff()
-
-                this.newGame('Player 1', "Player 2", this.time);
-
+                this.timerOff();
+                location.reload();
                 return;
             }
             this.players[index].eat(res.fallFigure);
             this.players[index].nextMove(res.movement);
-            this.activePlayer === 'white' ? this.activePlayer = 'black' : this.activePlayer = 'white';
+            this.activePlayer === "white" ?
+                (this.activePlayer = "black") :
+                (this.activePlayer = "white");
+            this.activePlayerView(this.activePlayer);
         }
     }
 
-
     boardHandler() {
         document.querySelector(".chessboardBox").addEventListener("click", (e) => {
-
             if (this.k % 2 === 0) {
                 this.fromMove = e.target.ref;
                 if (!this.fromMove.figureImg) {
@@ -82,30 +80,34 @@ class Game {
     }
 
     timerOn() {
-        return setInterval(() => {
-            var distance = this.lap--;
-            document.querySelector("#timer").innerHTML = distance;
-            if (distance < 0) {
-                clearInterval(this.timer);
-                document.querySelector("#timer").innerHTML = "EXPIRED";
-                let index;
-                this.activePlayer === 'white' ? index = 0 : index = 1;
-                alert("Game end!")
-                this.players[index].playerlose();
-                boardHtml.innerHTML = "";
-                this.players.forEach(el => {
-                    el.clearAll();
-                })
-                this.newGame('Player 1', "Player 2", this.time);
-            }
-        }, 1000);
+        if (this.lap) {
+            return setInterval(() => {
+                var distance = this.lap--;
+                document.querySelector("#timer").innerHTML = distance;
+                if (distance < 0) {
+                    clearInterval(this.timer);
+                    document.querySelector("#timer").innerHTML = "EXPIRED";
+                    let index;
+                    this.activePlayer === "white" ? (index = 0) : (index = 1);
+                    alert("Game end!");
+                    this.players[index].playerlose();
+                    location.reload();
+                }
+            }, 1000);
+        }
     }
+
     timerOff() {
-        clearInterval(this.timer);
+        if (this.lap) {
+            clearInterval(this.timer);
+        }
     }
 
-
+    activePlayerView(player) {
+        document.querySelector(
+            ".player_turn"
+        ).innerHTML = `${player.toUpperCase()} Player turn!`;
+    }
 }
 
-
-const app = new Game("Player 1", "Player 2", 30);
+const app = new Game("Player 1", "Player 2");

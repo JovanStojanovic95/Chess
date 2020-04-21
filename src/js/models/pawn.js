@@ -6,24 +6,20 @@
          this.figure;
          this.nativePosition = nativePosition;
          if (player === 'white') {
-             this.figure = "&#9817;"
+             this.figure = "&#9817;";
          } else {
              this.figure = "&#9823;";
          }
      }
 
      isMovePossible(src, dest) {
-         this.specialPower(src)
-         //console.log(src, dest);
-         // if (this.samePlayer(dest.figure)) {
-         //  return false;
-         //  }
+         this.specialPower(src);
          if (dest.figure instanceof Figure) {
              if (!this.samePlayer(dest.figure)) {
                  if (this.player === 'white') {
-                     return src.id + 11 === dest.id || src.id + 9 === dest.id
+                     return src.id + 11 === dest.id || src.id + 9 === dest.id;
                  } else {
-                     return src.id - 11 === dest.id || src.id - 9 === dest.id
+                     return src.id - 11 === dest.id || src.id - 9 === dest.id;
                  }
              }
          }
@@ -40,27 +36,24 @@
          }
      }
 
-
      isEnemy(dest) {
          return this.player !== dest.figure.player;
      }
-
 
      pathToDest(src, dest) {
          return [];
      }
 
      specialPower(dest) {
-         //  console.log(dest)
          if (this.player === 'white') {
              if (dest.id > 80) {
-                 console.log("Power ON")
+                 console.log("Power ON");
                  dest.figure = new Queen(this.player);
                  dest.changeFigure(dest.figure);
              }
          } else {
              if (dest.id < 20) {
-                 console.log("Power ON")
+                 console.log("Power ON");
                  dest.figure = new Queen(this.player);
                  dest.changeFigure(dest.figure);
              }

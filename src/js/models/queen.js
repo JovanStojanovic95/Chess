@@ -5,7 +5,7 @@ export default class Queen extends Figure {
         super(player);
         this.figure;
         if (player === 'white') {
-            this.figure = "&#9813;"
+            this.figure = "&#9813;";
         } else {
             this.figure = "&#9819;";
         }
@@ -24,7 +24,6 @@ export default class Queen extends Figure {
         }
         return false;
     }
-
 
     pathToDest(src, dest) {
         let path = [];

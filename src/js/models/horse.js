@@ -5,7 +5,7 @@ export default class Horse extends Figure {
         super(player);
         this.figure;
         if (player === 'white') {
-            this.figure = "&#9816;"
+            this.figure = "&#9816;";
         } else {
             this.figure = "&#9822;";
         }

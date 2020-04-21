@@ -16,6 +16,7 @@ export default class Square {
         this.div.innerHTML = this.figureImg;
         parent.appendChild(this.div);
     }
+
     changeFigure(ob) {
         if (!ob) {
             this.figureImg = "";
@@ -30,6 +31,4 @@ export default class Square {
     haveFigure() {
         return Object.keys(this.figure).length !== 0;
     }
-
-
 }

@@ -1,5 +1,4 @@
 import Figure from "./figure";
-import King from './king';
 
 export default class Rock extends Figure {
     constructor(player) {
@@ -13,17 +12,12 @@ export default class Rock extends Figure {
     }
 
     isMovePossible(src, dest, map) {
-        if (this.firstMove) {
-
-            //  this.specialPower(dest, src, map)
-        }
         if (this.samePlayer(dest.figure)) {
             return false;
         }
         if (Math.floor(src.id / 10) === Math.floor(dest.id / 10) ||
             src.id % 10 === dest.id % 10
         ) {
-
             this.firstMove = false;
             return true;
         }
@@ -49,33 +43,5 @@ export default class Rock extends Figure {
         }
         return path;
     }
-
-
-    /*  specialPower(dest, src, map) {
-          if (this.firstMove && dest.figure instanceof King && dest.figure.firstMove) {
-              if (Math.abs(src.id - dest.id) === 3) {
-                  if (!(map.get(src.id - 1).figure instanceof Figure) && !(map.get(src.id - 2).figure instanceof Figure)) {
-                      dest.figure = new Rock(this.player);
-                      src.figure = new King(this.player);
-                      dest.figure.specPower = true;
-                      src.figure.specPower = true;
-                      dest.square = src.id;
-                      src.square =
-                          console.log('mala rokada')
-                      console.log(src, dest);
-                  }
-              }
-              if (Math.abs(src.id - dest.id) === 4) {
-                  if (!(map.get(src.id + 1).figure instanceof Figure) && !(map.get(src.id + 2).figure instanceof Figure) && !(map.get(src.id + 3).figure instanceof Figure)) {
-                      dest.figure = new Rock(this.player);
-                      src.figure = new King(this.player);
-                      dest.figure.specPower = true;
-                      src.figure.specPower = true;
-                      src.square = dest.id;
-                      console.log('velika rokada')
-                  }
-              }
-          }
-      }*/
 
 }

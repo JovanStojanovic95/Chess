@@ -7,18 +7,16 @@ export default class King extends Figure {
         this.square = square;
         this.figure;
         if (player === 'white') {
-            this.figure = "&#9812;"
+            this.figure = "&#9812;";
         } else {
             this.figure = "&#9818;";
         }
     }
 
     isMovePossible(src, dest, map) {
-
         if (this.firstMove) {
             this.specialPower(dest, src, map)
         }
-
         if (this.samePlayer(dest.figure)) {
             return false;
         }
@@ -33,16 +31,16 @@ export default class King extends Figure {
             this.firstMove = false;
             return true;
         }
-
     }
 
     pathToDest(src, dest) {
         return [];
     }
+
     specialPower(dest, src, map) {
 
         if (dest.figure.firstMove !== false && src.figure.firstMove !== false && dest.figure instanceof Rock) {
-            console.log(src, dest, 'dubelje');
+
             if (Math.abs(src.id - dest.id) === 3) {
 
                 if (!(map.get(src.id + 1).figure instanceof Figure) && !(map.get(src.id + 2).figure instanceof Figure)) {
@@ -54,8 +52,6 @@ export default class King extends Figure {
                     dest.figure.square = null;
                     dest.figure.square = dest.id;
                     dest.figure.specPower = true;
-
-
                 }
             }
             if (Math.abs(src.id - dest.id) === 4) {
@@ -71,12 +67,8 @@ export default class King extends Figure {
             }
         }
         return false
-
     }
 
-    specPath(src, dest) {
-
-    }
     getPositons() {
         return [this.square + 1, this.square - 1, this.square + 9, this.square - 9,
             this.square - 9, this.square + 10, this.square - 10, this.square + 11, this.square - 11

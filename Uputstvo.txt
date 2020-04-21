@@ -1,0 +1,6 @@
+1.Ukucati u konzoli komandu 'npm install' zbog potrebnih biblioteka.
+2.Potom ukucati komandu 'npm run start' za pokretanje aplikacije.
+3.Pokrenuti web pretrazivac sa adresom "http://localhost:8080/"
+4.Zatim kliknuti na navbar Projects/Project Chess 
+
+github: https://github.com/JovanStojanovic95/Chess/tree/develop

@@ -5,7 +5,7 @@ export default class Bishop extends Figure {
         super(player);
         this.figure;
         if (player === 'white') {
-            this.figure = "&#9815;"
+            this.figure = "&#9815;";
         } else {
             this.figure = "&#9821;";
         }
@@ -43,5 +43,4 @@ export default class Bishop extends Figure {
         }
         return path;
     }
-
 }
